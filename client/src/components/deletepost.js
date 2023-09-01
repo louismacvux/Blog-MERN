@@ -1,8 +1,8 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React from "react";
 import { Modal, Button, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 import axios from "axios";
 
-export default function Delete(props) {
+export default function DeleteModal(props) {
 
     async function deletePost(id) {
         try {

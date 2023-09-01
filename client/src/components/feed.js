@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
-//import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import '../styling/feed.css';
-import {Modal,Container, Row, Col, Button} from 'reactstrap';
-import Delete from './deletepost.js';
+import placeHolderphoto from '../asset/placeholder.jpeg'
+import {Container, Row, Col, Button, Card, CardBody, CardText, CardTitle, CardImg} from 'reactstrap';
+import DeleteModal from './deletepost.js';
+import UploadModal from './uploadpost.js';
 
 function Post(props){
     const [showModal, setShowModal] = useState(false);
@@ -15,27 +16,37 @@ function Post(props){
     const toggleModal = ()=>{
         setShowModal(!showModal)
     }
-    return(
-        <Container>
-            <Row className="justify-content-center">
-                <Col className="col-6 post"> <h4>Title: {props.post.title}</h4></Col>
-                <Col className="col-6 post align-content-flex-end"><p>Time: {props.post.time}</p></Col>
-                <Col className="col post"><h5>{props.post.content}</h5></Col>
-            </Row>
-            <Row>
-                <Col className="col-4"><Button onClick={openModal}>Delete</Button></Col>
-            </Row>
-            <Delete show={showModal} toggle = {toggleModal} id={props.post._id} />
-        </Container>
-    )
+    return (
+      <Card color="primary" outline>
+        <CardImg src={placeHolderphoto} />
+        <CardBody>
+          <CardTitle tag="h4">{props.post.title}</CardTitle>
+          <CardText>{props.post.content}</CardText>
+          <Button onClick={openModal}>Delete</Button>
+          <DeleteModal
+            show={showModal}
+            toggle={toggleModal}
+            id={props.post._id}
+          />
+        </CardBody>
+      </Card>
+    );
 
 }
 
 
 export default function Feed(){
-     const [feed, setFeed] = useState([]);
+    const [feed, setFeed] = useState([]);
+    const [showUpload, setShowUpload] = useState(false);
 
-     useEffect(() =>{
+    const toggleUploadModal = () => {
+        setShowUpload(!showUpload)
+    }
+
+    const openUploadModal = () => {
+        setShowUpload(true)
+    }
+    useEffect(() =>{
         async function getPosts(){
             const response = await axios.get('http://localhost:8000/feed')
             if (!response){
@@ -49,33 +60,35 @@ export default function Feed(){
 
         getPosts();
         return;
-     }, [feed.length])
+    }, [feed.length])
 
-     function showPosts(){
-        return feed.map((post) => {
-            return (
-                <div className="post">
-                    <Post post = {post}/>
-                </div>
-            )
-        });
-     }
-
-
-     return(
-        <div>
-            <Container>
-                <Row>
-                    <Col>
-                        <h1>Feed</h1>
-                        <tr>
-                            <td>
-                                {showPosts()}
-                            </td>
-                        </tr>
+    function showPosts(){
+        return(
+            <Row xs={2} md={3} className="g-4">
+                {feed.map((post) => (
+                    <Col key={post._id}>
+                        <Post post = {post}/>
                     </Col>
-                </Row>
-            </Container>
-        </div>
-     );
+                ))}
+            </Row>
+        );
+    }
+
+
+    return (
+        <div>
+        <Container>
+           <Row>
+             <Col className="col-4">
+               <h2>Feed</h2>
+             </Col>
+             <Col className="col-4">
+               <Button color="primary" onClick={openUploadModal}>Upload</Button>
+               <UploadModal show = {showUpload} toggle = {toggleUploadModal}/>
+             </Col>
+           </Row>
+           {showPosts()}
+         </Container>
+       </div>
+    );
 }
