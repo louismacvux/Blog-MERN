@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Modal, ModalHeader, ModalBody, ModalFooter, 
+import {Modal, ModalHeader, ModalBody,
 Col, Button, Form, FormGroup, Label, Input} from "reactstrap";
 import axios from "axios";
 
@@ -24,56 +24,56 @@ export default function UploadModal(props){
 
   const handleSubmit = (event) =>{
     //window.alert(JSON.stringify(postContent))
-    UploadPost();
+    UploadPost().then(() => window.location.reload(true));
+    props.toggle();
   }
 
   return (
     <Modal isOpen={props.show} toggle={props.toggle}>
       <ModalHeader>Upload</ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleSubmit} onChange={handleChange}>
-          <FormGroup row>
-            <Label for="title" sm={2}>
-              Title
-            </Label>
-            <Col sm={10}>
-              <Input
-                required
-                id="title"
-                name="title"
-                placeholder="Title"
-                type="text"
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="content" sm={2}>
-              Content
-            </Label>
-            <Col sm={10}>
-              <Input
-                required
-                id="content"
-                name="content"
-                placeholder="What's on your mind?"
-                type="text"
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="picture" sm={2}>
-              Photos
-            </Label>
-            <Col sm={10}>
-              <Input id="picture" name="file" type="file" />
-            </Col>
-          </FormGroup>
-        </Form>
-        <ModalFooter>
-          <Button type="submit" color="primary">Post</Button>
-          <Button onClick={props.toggle}>Cancel</Button>
-        </ModalFooter>
-      </ModalBody>
+        <ModalBody>
+          <Form onSubmit={handleSubmit} onChange={handleChange}>
+            <FormGroup row>
+              <Label for="title" sm={2}>
+                Title
+              </Label>
+              <Col sm={10}>
+                <Input
+                  required
+                  id="title"
+                  name="title"
+                  placeholder="Title"
+                  type="text"
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="content" sm={2}>
+                Content
+              </Label>
+              <Col sm={10}>
+                <Input
+                  required
+                  id="content"
+                  name="content"
+                  placeholder="What's on your mind?"
+                  type="textarea"
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="img" sm={2}>
+                Photos
+              </Label>
+              <Col sm={10}>
+                <Input id="img" name="file" type="file" 
+                accept="image/*"/>
+              </Col>
+            </FormGroup>
+            <Button style={{marginRight:10}} type="submit" color="primary">Post</Button>
+            <Button onClick={props.toggle}>Cancel</Button>
+          </Form>
+        </ModalBody>
     </Modal>
   );
 }

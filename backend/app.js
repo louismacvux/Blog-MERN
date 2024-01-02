@@ -6,6 +6,8 @@ import dotenv from "dotenv"
 import bodyParser from "body-parser";
 const app = express();
 import feedRoute from './api/feed.route.js'
+import postRoute from './api/post.route.js'
+
 dotenv.config();
 app.use(cors());
 app.use(express.json());
@@ -37,6 +39,7 @@ connectDB();
 
 app.get('/', (req,res) => res.send('Hello World!'));
 app.use('/feed',feedRoute);
+app.use('/post', postRoute);
 
 const port = process.env.PORT || 8082;
 

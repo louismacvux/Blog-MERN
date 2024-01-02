@@ -1,8 +1,10 @@
 .post {
     border-style:ridge;
     border-color: rgb(57, 111, 237);
-    border-radius: 10%;
+    border-radius: 3%;
     border-width: thin;
-    margin-bottom: 20px;
     background-color: rgb(222, 235, 247);
+    width: 320px;
+    height: 415px;
 }
+

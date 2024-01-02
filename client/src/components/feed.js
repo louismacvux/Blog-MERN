@@ -2,34 +2,21 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 import '../styling/feed.css';
 import placeHolderphoto from '../asset/placeholder.jpeg'
-import {Container, Row, Col, Button, Card, CardBody, CardText, CardTitle, CardImg} from 'reactstrap';
-import DeleteModal from './deletepost.js';
+import {Container, Row, Col, Button, Card, CardBody, CardText, CardTitle, CardImg, CardFooter} from 'reactstrap';
 import UploadModal from './uploadpost.js';
+import { Link, useNavigate} from 'react-router-dom';
 
-function Post(props){
-    const [showModal, setShowModal] = useState(false);
+function PostCard(props){
+  const navigate = useNavigate();
 
-    const openModal = ()=>{
-        setShowModal(true);
-    }
-
-    const toggleModal = ()=>{
-        setShowModal(!showModal)
-    }
     return (
-      <Card color="primary" outline>
-        <CardImg src={placeHolderphoto} />
-        <CardBody>
-          <CardTitle tag="h4">{props.post.title}</CardTitle>
-          <CardText>{props.post.content}</CardText>
-          <Button onClick={openModal}>Delete</Button>
-          <DeleteModal
-            show={showModal}
-            toggle={toggleModal}
-            id={props.post._id}
-          />
-        </CardBody>
-      </Card>
+        <Card color="primary" outline className="post" onClick ={() => navigate(`/post/${props.post._id}`)}>
+          <CardImg src={placeHolderphoto} />
+          <CardBody>
+            <CardTitle tag="h5">{props.post.title}</CardTitle>
+            <CardText>{props.post.content.slice(0, 100)}...</CardText>
+          </CardBody>
+        </Card>
     );
 
 }
@@ -67,7 +54,7 @@ export default function Feed(){
             <Row xs={2} md={3} className="g-4">
                 {feed.map((post) => (
                     <Col key={post._id}>
-                        <Post post = {post}/>
+                        <PostCard post = {post}/>
                     </Col>
                 ))}
             </Row>

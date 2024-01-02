@@ -31,27 +31,4 @@ router.post('/post', async (req,res) => {
         res.send("ERROR /feed/post - " + err.message);
     }
 })
-
-router.patch('/:id', async(req,res) => {
-    try{
-        let post = await PostModel.findById(req.params.id);
-        post.title = req.body.title;
-        post.time = post.time;
-        post.update_time = new Date();
-        post.content = req.body.content;
-        post.save();
-        res.send("update: " + req.body.title);
-    }catch(err){
-        res.send(`ERROR /feed/${req.params.id} - ${err.message}`);
-    }
-})
-
-router.delete('/:id', async(req,res) =>{
-    try{
-        await PostModel.findByIdAndDelete(req.params.id);
-        res.send("delete: " + req.params.id);
-    }catch(err){
-        res.status(400).send(`ERROR /feed/${req.params.id} - ${err.message}`);
-    }
-})
 export default router

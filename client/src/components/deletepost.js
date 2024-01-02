@@ -1,19 +1,21 @@
 import React from "react";
 import { Modal, Button, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 import axios from "axios";
+import {useNavigate} from 'react-router-dom';
 
 export default function DeleteModal(props) {
+    const navigate = useNavigate();
 
     async function deletePost(id) {
         try {
-            await axios.delete(`http://localhost:8000/feed/${id}`);
+            await axios.delete(`http://localhost:8000/post/${id}`);
         } catch (err) {
             window.alert(`An error has occured: ${err.statusText}\n id:${id}`);
         }
     }
 
     const afterDelete =() => {
-        deletePost(props.id).then(() => window.location.reload(true))
+        deletePost(props.id).then(() => navigate('/feed'))
         props.toggle();
     }
 
