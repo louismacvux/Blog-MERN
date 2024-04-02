@@ -1,22 +1,27 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 import '../styling/feed.css';
-import placeHolderphoto from '../asset/placeholder.jpeg'
 import {Container, Row, Col, Button, Card, CardBody, CardText, CardTitle, CardImg, CardFooter} from 'reactstrap';
 import UploadModal from './uploadpost.js';
 import { Link, useNavigate} from 'react-router-dom';
 
 function PostCard(props){
   const navigate = useNavigate();
-
+  const placeholder = "https://picsum.photos/300/200";
+  const content = props.post.content
     return (
-        <Card color="primary" outline className="post" onClick ={() => navigate(`/post/${props.post._id}`)}>
-          <CardImg src={placeHolderphoto} />
-          <CardBody>
-            <CardTitle tag="h5">{props.post.title}</CardTitle>
-            <CardText>{props.post.content.slice(0, 100)}...</CardText>
-          </CardBody>
-        </Card>
+      <Card
+        color="primary"
+        outline
+        className="postcard"
+        onClick={() => navigate(`/post/${props.post._id}`)}
+      >
+        <CardImg src={placeholder} />
+        <CardBody>
+          <CardTitle tag="h5">{props.post.title}</CardTitle>
+            <CardText>{content}</CardText>
+        </CardBody>
+      </Card>
     );
 
 }
@@ -51,9 +56,9 @@ export default function Feed(){
 
     function showPosts(){
         return(
-            <Row xs={2} md={3} className="g-4">
+            <Row  className="g-4">
                 {feed.map((post) => (
-                    <Col key={post._id}>
+                    <Col key={post._id} sm={{size: 4, offset: 2}} md={{size: 3, offset: 1}}>
                         <PostCard post = {post}/>
                     </Col>
                 ))}

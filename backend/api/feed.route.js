@@ -9,6 +9,13 @@ router.use(
   }),
 );
 
+const validateInputPost = (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).send("Post cannot be empty.");
+  }
+  next();
+};
+
 router.get('/', async (req,res) => {
     const feed = await PostModel.find({})
     try{
@@ -19,7 +26,7 @@ router.get('/', async (req,res) => {
 
 })
 
-router.post('/post', async (req,res) => {
+router.post('/post', validateInputPost, async (req,res) => {
     try{
         const post = await PostModel.create({
             title: req.body.title,
@@ -28,7 +35,7 @@ router.post('/post', async (req,res) => {
         });
         res.send("posted: " + post);
     }catch(err){
-        res.send("ERROR /feed/post - " + err.message);
+        res.status(400).send("ERROR /feed/post - " + err.message);
     }
 })
 export default router

@@ -7,11 +7,13 @@ export default function DeleteModal(props) {
     const navigate = useNavigate();
 
     async function deletePost(id) {
-        try {
-            await axios.delete(`http://localhost:8000/post/${id}`);
-        } catch (err) {
-            window.alert(`An error has occured: ${err.statusText}\n id:${id}`);
-        }
+        axios.delete(`http://localhost:8000/post/${id}`)
+            .then((response) => {
+                console.log(response.data)
+            })
+            .catch((error) => {
+                window.alert(`An error has occured: ${error.statusText}`);
+            })
     }
 
     const afterDelete =() => {

@@ -1,10 +1,10 @@
-.post {
+.postcard {
     border-style:ridge;
     border-color: rgb(57, 111, 237);
     border-radius: 3%;
     border-width: thin;
     background-color: rgb(222, 235, 247);
-    width: 320px;
-    height: 415px;
+    height: 300px;
+    overflow:hidden;
 }
 
