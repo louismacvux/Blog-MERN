@@ -1,10 +1,31 @@
 .postcard {
     border-style:ridge;
-    border-color: rgb(57, 111, 237);
+    border-color: rgb(2, 6, 18);
     border-radius: 3%;
     border-width: thin;
-    background-color: rgb(222, 235, 247);
+    background-color: rgb(241, 241, 241);
     height: 300px;
     overflow:hidden;
+    margin-bottom: 15px;
 }
 
+.postcard-body{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardimg{
+    height: 200px;
+    width: auto;
+    object-fit:cover;
+}
+
+/*works for chrome, not safari. not sure on other browsers*/
+.multine-ellipsis { 
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}

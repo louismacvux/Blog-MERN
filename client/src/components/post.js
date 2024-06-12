@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
 import DeleteModal from "./deletepost.js";
 import EditModal from "./editpost.js";
+import MyNav from './navbar.js';
 import "../styling/post.css";
 
 export default function Post(props){
@@ -33,7 +34,6 @@ export default function Post(props){
       async function getPost() {
         axios.get(`http://localhost:8000/post/${id}`)
               .then((response) => {
-                console.log(response)
                 setPost(response.data)
               })
               .catch((error) => {
@@ -79,6 +79,9 @@ export default function Post(props){
     }
 
     return(
-      showPost()
+      <div>
+        <MyNav/>
+        {showPost()}
+      </div>
     );
 }
