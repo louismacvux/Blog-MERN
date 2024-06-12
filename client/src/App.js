@@ -1,6 +1,6 @@
-import Feed from './components/feed.js';
-import FourOhFour from './components/fourohfour.js';
-import Post from './components/post.js'
+import Feed from './components/Blog/feed.js';
+import FourOhFour from './components/Blog/fourohfour.js';
+import Post from './components/Blog/post.js'
 import {Route, Routes} from 'react-router-dom';
 
 function App() {
