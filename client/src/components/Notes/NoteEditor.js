@@ -1,9 +1,7 @@
 import React, {useState, useMemo} from 'react';
-import axios from 'axios';
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import "../../styling/notes.css";
-import {Button} from 'reactstrap';
 
 export default function NoteEditor(props) {
     const [value, setValue] = useState("");

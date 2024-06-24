@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import SideBar from './SideBar';
 import NoteEditor from './NoteEditor';
+import GoogleLogin from '../GoogleLogin';
 import "../../styling/notes.css";
 
 import {
@@ -11,13 +12,19 @@ import {
   Button,
 } from "reactstrap";
 
+const api = axios.create({
+  baseURL: "http://localhost:8000",
+  withCredentials: true,
+});
+
 export default function AppNotes() {
     const [notes, setNotes] = useState(null);
     const [selectedId, setSelectedId] = useState(0)
+    const [user,setUser] = useState()
 
     useEffect(() => {           
-      axios
-        .get("http://localhost:8000/feed")
+      api
+        .get("/feed")
         .then((response) => {
           if (response.status !== 200) {
             window.alert(`An error has occured: ${response.statusText}`);
@@ -27,15 +34,15 @@ export default function AppNotes() {
         .then((data) => {
             setNotes(data)})
         .catch((error) => console.log(`An error has occured: ${error}`));
-    }, []);
+    }, [user]);
 
     const selectNote = (id) =>{
         setSelectedId(id)
     }
 
     async function deleteNote () {
-        axios
-          .delete(`http://localhost:8000/post/${selectedId}`)
+        api
+          .delete(`/post/${selectedId}`)
           .then((response) => {
             console.log(response.data);
           })
@@ -61,25 +68,26 @@ export default function AppNotes() {
       if (selectedNote) window.alert(selectedNote.content)
       else window.alert("Choose a note to edit first, or create new note.")
     }
-    return (
-      <div className="app-container">
+
+    function showLoggedIn(){
+      return (
         <Container className="container app">
           {notes ? (
             <div>
               <Row className="header">
-                <h3>Secret Agent's Note</h3>
+                <h3>
+                  {user && user.name} ({user && user.email})'s Note
+                </h3>
                 <Button
                   className="col-3 mx-3 delete-note"
-                  onClick={() => deleteNote()}>
+                  onClick={() => deleteNote()}
+                >
                   Delete
                 </Button>
-                <Button className="col-3"
-                  onClick={()=>saveNote()}>
+                <Button className="col-3" onClick={() => saveNote()}>
                   Save
-                  </Button>
-                <Button 
-                  className="col-3 mx-3" 
-                  onClick={() => newNote()}>
+                </Button>
+                <Button className="col-3 mx-3" onClick={() => newNote()}>
                   New Note
                 </Button>
               </Row>
@@ -102,6 +110,18 @@ export default function AppNotes() {
             <p className="no-note">fetching notes...</p>
           )}
         </Container>
+      );
+    }
+
+    function Login(){
+      return(
+        <GoogleLogin setUser={setUser}></GoogleLogin>
+      )
+    }
+
+    return (
+      <div className="app-container">
+        {user ? (showLoggedIn()): (Login())}
       </div>
     );
 }

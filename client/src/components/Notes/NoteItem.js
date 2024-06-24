@@ -1,5 +1,3 @@
-import React, {useState, useEffect} from 'react';
-import {Button} from 'reactstrap';
 import "../../styling/notes.css";
 import {Container, Row} from 'reactstrap';
 

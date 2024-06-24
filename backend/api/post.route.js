@@ -35,7 +35,7 @@ const validateInputPost = (req, res, next) => {
 }
 
 router.get("/:id", findPost, (req, res) => {
-    res.send(res.locals.post).send("OK")
+    res.status(200).send(res.locals.post)
     console.log("OK 200")
 })
 

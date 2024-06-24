@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
 import NoteItem from './NoteItem.js';
 import "../../styling/notes.css";
 
