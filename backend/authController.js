@@ -13,14 +13,12 @@ const signToken = (id) => {
 // Create and send Cookie ->
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user.id);
-
-  console.log(process.env.JWT_COOKIE_EXPIRES_IN);
+  const expiry = new Date(Date.now() + Number(process.env.JWT_COOKIE_EXPIRES_IN) * 1000)
+  console.log(expiry);
   const cookieOptions = {
-    expires: new Date(Date.now() +  Number(process.env.JWT_COOKIE_EXPIRES_IN)),
+    expires: expiry,
     httpOnly: true,
-    path: "/",
-    sameSite: "lax",
-    // secure: true,
+    path: "/"
   };
   if (process.env.NODE_ENV === "production") {
     cookieOptions.secure = true;
@@ -65,7 +63,7 @@ const googleAuth = async (req, res, next) => {
         image: userRes.data.picture,
       });
     }
-
+    
     createSendToken(user, 201, res);
   }catch(err){
     next(err)

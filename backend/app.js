@@ -3,9 +3,10 @@ import mongoose from 'mongoose'
 import cors from "cors"
 import dotenv from "dotenv"
 import bodyParser from "body-parser";
-import feedRoute from './api/feed.route.js'
-import postRoute from './api/post.route.js'
+import feedRoute from './api/blog/feed.blog.js'
+import postRoute from './api/blog/post.blog.js'
 import AuthRoute from './api/auth.route.js'
+import Logout from './api/logout.route.js'
 import xss from 'xss';
 import mongoSanitze from 'express-mongo-sanitize';
 
@@ -48,23 +49,49 @@ const connectDB = async () =>{
 
 connectDB();
 
-app.use((req, res, next) => {
+const parseCookies = (req, res, next) => {
+  const {
+    headers: { cookie },
+  } = req;
+  if (cookie) {
+    const values = cookie.split(";").reduce((res, item) => {
+      const data = item.trim().split("=");
+      return { ...res, [data[0]]: data[1] };
+    }, {});
+    res.locals.cookie = values;
+  } else res.locals.cookie = {};
+  next();
+}
+
+const parseJWT = (token)=> {
+  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+}
+
+const logger = (req, res, next) => {
   req.requestTime = new Date().toISOString();
   console.log(req.requestTime);
-  if (req.cookies) console.log(req.cookies);
-  console.log(req.headers)
-  console.log(req.body)
-  console.log(req.query)
-  next();
-});
-
+  console.log(res.locals.cookie);
+  if (res.locals.cookie.jwt) {
+    res.locals.id = parseJWT(res.locals.cookie.jwt);
+    next();
+  } else {
+    res.status(404).send("404 - Unauthorized");
+  }
+};
 app.use((req, res, next) => {
   res.setHeader("Content-Type", "application/json");
   next();
 });
 
-app.get('/', (req,res) => res.send('Hello World!'));
+
+app.get("/header", (req, res) => res.send(req.headers)); //check set-cookie
+app.get("/", (req, res) => res.send("Hello World!"));
+
+app.use(parseCookies);
+app.use(logger);
+
 app.use('/api/v1/auth', AuthRoute);
+app.use('/api/v1/auth/logout', Logout);
 app.use('/feed',feedRoute);
 app.use('/post', postRoute);
 

@@ -1,5 +1,5 @@
 import express from "express"
-import PostModel from "../db/PostSchema.js"
+import PostModel from "../../db/PostSchema.js"
 import bodyParser from "body-parser";
 const router = express.Router()
 router.use(bodyParser.json());
@@ -13,9 +13,6 @@ const findPost = async (req, res, next) => {
   let post
   try{
     post = await PostModel.findById(req.params.id)
-    if (!post){
-      return res.status(404).send("Could not find post with id " + req.params.id)
-    }
     res.locals.post = post
     next()
     console.log(post)

@@ -1,5 +1,5 @@
 import express from "express"
-import PostModel from "../db/PostSchema.js"
+import PostModel from "../../db/PostSchema.js"
 import bodyParser from "body-parser";
 const router = express.Router()
 router.use(bodyParser.json());
@@ -19,9 +19,9 @@ const validateInputPost = (req, res, next) => {
 router.get('/', async (req,res) => {
     const feed = await PostModel.find({})
     try{
-        res.send(feed);
+        res.send(feed.reverse());
     }catch(err){
-        res.status(404).send("Could not fetch feed");
+        res.status(404).send(`Could not fetch feed - ${err}`);
     }
 
 })
