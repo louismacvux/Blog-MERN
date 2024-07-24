@@ -5,42 +5,10 @@ import User from "./db/UserSchema.js";
 import dotenv from "dotenv";
 
 dotenv.config();
-const signToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_TIMEOUT,
-  });
-};
-// Create and send Cookie ->
-const createSendToken = (user, statusCode, res) => {
-  const token = signToken(user.id);
-  const expiry = new Date(Date.now() + Number(process.env.JWT_COOKIE_EXPIRES_IN) * 1000)
-  console.log(expiry);
-  const cookieOptions = {
-    expires: expiry,
-    httpOnly: true,
-    path: "/"
-  };
-  if (process.env.NODE_ENV === "production") {
-    cookieOptions.secure = true;
-    cookieOptions.sameSite = "none";
-  }
 
-  user.password = undefined;
-
-  res.cookie("jwt", token, cookieOptions);
-
-  console.log(user);
-
-  res.status(statusCode).json({
-    message: "success",
-    token,
-    data: {
-      user,
-    },
-  });
-};
 /* GET Google Authentication API. */
 const googleAuth = async (req, res, next) => {
+  console.log("googleAuth")
   try {
     const code = req.query.code;
     console.log("USER CREDENTIAL -> ", code);
@@ -64,10 +32,14 @@ const googleAuth = async (req, res, next) => {
       });
     }
     
-    createSendToken(user, 201, res);
+    req.session.user = user;
+
+    res.send(req.session.user);
+    console.log(`Session set: ${req.sessionID}`);
+    console.log(req.session);
   }catch(err){
     next(err)
   }
-};
+}; 
 
 export default googleAuth

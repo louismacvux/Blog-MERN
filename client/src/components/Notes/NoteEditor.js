@@ -15,7 +15,7 @@ export default function NoteEditor(props) {
       return {
         showIcons: ["table", "code"],
         sideBySideFullscreen: false,
-        maxHeight: "55vh"
+        maxHeight:"400px"
       };
     }, []);
 
@@ -23,9 +23,9 @@ export default function NoteEditor(props) {
         return <div className="note-editor no-note">Select a note to edit</div>;
     }
 
+
     return (
       <div className="note-editor">
-        <h4 className="d-inline-block">{props.note.title}</h4>
         <SimpleMDE
           id="editor"
           value={props.note.content}
@@ -35,3 +35,4 @@ export default function NoteEditor(props) {
       </div>
     );
 }
+

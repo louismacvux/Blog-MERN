@@ -5,12 +5,12 @@
     align-items: center;
     height: 100vh;
     background-color: #f0f0f0;
+    transition: background-color 0.3s;
 }
 
 .app {
     width: 95%;
     max-width: 1200px;
-    height: 95vh;
     background-color: white;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -23,16 +23,23 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
 /* src/Sidebar.css */
 .sidebar {
-    /* width: 250px; */
+    width: 240px;
     background-color: #f5f5f5;
     padding: 10px;
     box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    overflow-y: auto;
+    height: 85vh;
+    transition: background-color 0.3s, width 0.3s;
+}
+
+.sidebar.collapsed {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 .add-note {
@@ -47,6 +54,7 @@
 
 .notes-list {
     flex-grow: 1;
+    overflow-y:auto;
 }
 
 /* src/NoteItem.css */
@@ -67,22 +75,34 @@
     flex-grow: 1;
 }
 
-.delete-note {
-    background-color: #ff3b30;
+.button{
     color: white;
     border: none;
     padding: 5px;
     cursor: pointer;
     border-radius: 5px;
 }
+.delete {
+    background-color: #ff3b30;
+}
+
+.save{
+    background-color: #0fb500;
+}
 
 /* src/NoteEditor.css */
 .note-editor {
     flex-grow: 1;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     overflow: auto;
+    height: 100%;
+    transition: background-color 0.3s, width 0.3s;
+}
+
+.note-editor.expanded {
+    width: 100%;
 }
 
 .no-note {

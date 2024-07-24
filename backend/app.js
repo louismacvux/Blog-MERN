@@ -3,16 +3,22 @@ import mongoose from 'mongoose'
 import cors from "cors"
 import dotenv from "dotenv"
 import bodyParser from "body-parser";
-import feedRoute from './api/blog/feed.blog.js'
-import postRoute from './api/blog/post.blog.js'
-import AuthRoute from './api/auth.route.js'
-import Logout from './api/logout.route.js'
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import feedRoute from './api/blog/feed.blog.js';
+import postRoute from './api/blog/post.blog.js';
+import noteRoute from './api/note/post.note.js';
+import allNotesRoute from './api/note/feed.note.js';
+import AuthRoute from './api/auth.route.js';
+import Logout from './api/logout.route.js';
+import {sessionChecker, logger, parseCookies} from './utils/middleware.js';
 import xss from 'xss';
 import mongoSanitze from 'express-mongo-sanitize';
 
+dotenv.config();
+
 const app = express();
 
-dotenv.config();
 app.use(
   cors({
     credentials: true,
@@ -20,15 +26,37 @@ app.use(
     origin: true,
   })
 );
+
 app.use(express.json());
+
 app.use(bodyParser.json());
+
 //app.use(mongoSanitze);
 // app.use(xss);
+
 app.use(
   bodyParser.urlencoded({
     extended: true,
   }),
 );
+
+app.use(session({
+  name: process.env.SESS_NAME,
+  secret: process.env.SESS_SECRET,
+  saveUninitialized: false,
+  resave:false,
+  rolling: true,
+  store: MongoStore.create({
+    mongoUrl : process.env.DB_URI,
+    collectionName: 'session'
+  }),
+  cookie: {
+    sameSite: true, 
+    secure: false, //NODE_ENV === 'production'
+    maxAge: parseInt(60)*1000 //10 mins
+  }
+}));
+
 
 const connectDB = async () =>{
     try{
@@ -49,49 +77,44 @@ const connectDB = async () =>{
 
 connectDB();
 
-const parseCookies = (req, res, next) => {
-  const {
-    headers: { cookie },
-  } = req;
-  if (cookie) {
-    const values = cookie.split(";").reduce((res, item) => {
-      const data = item.trim().split("=");
-      return { ...res, [data[0]]: data[1] };
-    }, {});
-    res.locals.cookie = values;
-  } else res.locals.cookie = {};
-  next();
-}
+//Middlewares
+app.use(parseCookies);
 
-const parseJWT = (token)=> {
-  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-}
-
-const logger = (req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  console.log(req.requestTime);
-  console.log(res.locals.cookie);
-  if (res.locals.cookie.jwt) {
-    res.locals.id = parseJWT(res.locals.cookie.jwt);
-    next();
-  } else {
-    res.status(404).send("404 - Unauthorized");
-  }
-};
 app.use((req, res, next) => {
   res.setHeader("Content-Type", "application/json");
   next();
 });
 
+//Public Routes
+app.get("/api/v1/session/get", (req, res) => {
+  const user = { username: "Lon", user_id: 123456 };
+  req.session.user = user;
+  res.send(req.session);
+  console.log("session set");
+});
 
-app.get("/header", (req, res) => res.send(req.headers)); //check set-cookie
-app.get("/", (req, res) => res.send("Hello World!"));
+app.get("/api/v1/header", sessionChecker, (req, res) => {
+  console.log(req.session.user);
+  console.log(req.sessionID);
+  res.status(200).send(req.session);
+}); //check set-cookie
 
-app.use(parseCookies);
-app.use(logger);
+app.use("/api/v1/auth/login", AuthRoute);
 
-app.use('/api/v1/auth', AuthRoute);
+app.use(sessionChecker);
+//Protected Routes
+app.get("/api/v1/session/destroy", (req,res) => {
+  req.session.destroy((err) => {
+    if (err) throw (err)
+    res.clearCookie(process.env.SESS_NAME);
+    res.status(200).send("Session destroyed")
+  });
+})
+
 app.use('/api/v1/auth/logout', Logout);
+
+app.use('/api/v1/note', noteRoute);
+app.use('/api/v1/notes', allNotesRoute);
 app.use('/feed',feedRoute);
 app.use('/post', postRoute);
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import baseAPI from '../utils/api'
+import baseAPI from '../utils/api';
 import { useGoogleLogin } from '@react-oauth/google';
 
 export default function LoginGoogle(props) {
 
-    const googleAuth = (code) => baseAPI.get(`api/v1/auth/google?code=${code}`);
+    const googleAuth = (code) => baseAPI.get(`/auth/login/google?code=${code}`);
 
     const responseGoogle = async (authResult) => {
         console.log("responseGOOGle")
@@ -12,8 +12,9 @@ export default function LoginGoogle(props) {
             if (authResult["code"]){
                 // console.log(authResult.code);
                 const result = await googleAuth(authResult.code)
-                props.setUser(result.data.data.user);
-                alert("Succesuly logged in");
+                props.setUser(result.data);
+                console.log(result);
+                localStorage.setItem('user',JSON.stringify(result.data));
             }else{
                 console.log(authResult);
             }
