@@ -53,7 +53,7 @@ app.use(session({
   cookie: {
     sameSite: true, 
     secure: false, //NODE_ENV === 'production'
-    maxAge: parseInt(60)*1000 //10 mins
+    maxAge: parseInt(process.env.SESS_EXPIRES)*1000 //10 mins
   }
 }));
 

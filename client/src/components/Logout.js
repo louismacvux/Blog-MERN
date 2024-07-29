@@ -14,9 +14,9 @@ export default function Logout(props){
     }
 
     return (
-        <Button className="col-2" onClick={() => logout()}>
+        <div className="col-2" onClick={() => logout()}>
           Log Out
-        </Button>
+        </div>
     );
 
 }

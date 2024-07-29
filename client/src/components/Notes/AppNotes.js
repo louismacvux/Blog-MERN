@@ -3,7 +3,7 @@ import baseAPI from '../../utils/api';
 import SideBar from './SideBar';
 import NoteEditor from './NoteEditor';
 import GoogleLogin from '../GoogleLogin';
-import Logout from '../Logout';
+import UserDropdown from './UserMenu.js';
 import intro from '../../utils/intro.js'
 import "../../styling/notes.css";
 import "../../styling/modal.css";
@@ -22,9 +22,12 @@ import {
 export default function AppNotes() {
     const [notes, setNotes] = useState(null);
     const [selectedId, setSelectedId] = useState(0);
-    const [user,setUser] = useState();
     const [isSidebarCollapsed, setIsSidebarCollapsed] =  useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [user, setUser] = useState(() => {
+      const user = localStorage.getItem("user");
+      return JSON.parse(user) || null;
+    });
 
     async function getNotes(){
       baseAPI
@@ -43,19 +46,13 @@ export default function AppNotes() {
         })
         .catch((error) => console.log(`An error has occured: ${error}`));
     }
-    
-    useEffect(() => {
-      const loggedIn = localStorage.getItem("user");
-      if (loggedIn){
-        setUser(JSON.parse(loggedIn));
-      }
-    }, []);
 
     useEffect(() => {
       if (user){
+        document.title = `${user.name}'s notes`;
         getNotes();
       }
-    },[user])
+    },[])
     
     const selectNote = (id) =>{
         setSelectedId(id)
@@ -155,65 +152,73 @@ export default function AppNotes() {
         <Container className="app">
           {notes ? (
             <div>
-              <h3>
-                {user && user.name} ({user && user.email})'s Note
-              </h3>
-              <Row className="header">
-                <Button
-                  className="col-2"
-                  onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                >
-                  Sidebar
-                </Button>
-                <Button className="col-2  delete" onClick={() => setIsModalOpen(true)}>
-                  Delete
-                </Button>
-                <Button className="col-2 save" onClick={() => saveNote()}>
-                  Save
-                </Button>
-                <Button className="col-2 " onClick={() => newNote()}>
-                  New Note
-                </Button>
-                <Logout setUser={setUser}>Logout</Logout>
-              </Row>
               <Row>
-                <Col className="col-4 col-lg-3">
-                  {!isSidebarCollapsed && (
-                    <SideBar
-                      notes={notes}
-                      selectNote={selectNote}
-                      selectedId={selectedId}
-                    />
-                  )}
+                <Col>
+                  <Container>
+                    <Row>
+                      <Button
+                        className="col-5"
+                        onClick={() =>
+                          setIsSidebarCollapsed(!isSidebarCollapsed)
+                        }>
+                        Sidebar
+                      </Button>
+                      <Button className="col-5" onClick={() => newNote()}>
+                        New Note
+                      </Button>
+                    </Row>
+                    <Row>
+                      {!isSidebarCollapsed && (
+                        <SideBar
+                          notes={notes}
+                          selectNote={selectNote}
+                          selectedId={selectedId}
+                        />
+                      )}
+                    </Row>
+                  </Container>
                 </Col>
                 <Col
                   className={` ${
                     isSidebarCollapsed ? "col-12" : "col-8 col-lg-9"
                   }`}
                 >
+                  <div className="box col-1 offset-6">
+                    <UserDropdown setUser={setUser} />
+                  </div>
                   <NoteEditor
                     note={notes.find((note) => selectedId === note._id)}
                     collapsed={isSidebarCollapsed}
+                    deleteNote={setIsModalOpen}
+                    saveNote={saveNote}
                   />
                 </Col>
               </Row>
-              <Modal className="modal" isOpen={isModalOpen} fade={false} centered={true} toggle={() => setIsModalOpen(false)}>
-                <ModalHeader toggle={() => setIsModalOpen(false)}>
+              <Modal
+                className="modal"
+                isOpen={isModalOpen}
+                fade={false}
+                centered={true}
+                toggle={() => setIsModalOpen(false)}
+              >
+                <ModalHeader
+                  className="close"
+                  toggle={() => setIsModalOpen(false)}
+                >
                   Confirm Delete
                 </ModalHeader>
                 <ModalBody>
                   Are you sure you want to delete this note?
                 </ModalBody>
                 <ModalFooter>
-                  <Button className="confirm-button" onClick={() => deleteNote()}>
-                    Yes
-                  </Button>{" "}
                   <Button
-                    className="cancel-button"
+                    className="confirm-button fa fa-lg fa-trash"
+                    onClick={() => deleteNote()}
+                  ></Button>{" "}
+                  <Button
+                    className="cancel-button fa fa-lg fa-times"
                     onClick={() => setIsModalOpen(false)}
-                  >
-                    No
-                  </Button>
+                  ></Button>
                 </ModalFooter>
               </Modal>
             </div>

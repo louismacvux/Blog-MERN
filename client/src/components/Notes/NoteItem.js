@@ -37,6 +37,28 @@ function truncateString(str, length = 50) {
   }
   return str.slice(0, length) + "...";
 }
+function daysFrom(time) {
+  const date = new Date(time);
+  const currentDate = new Date();
+  const differenceInTime = currentDate.getTime() - date.getTime();
+  const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+  return differenceInDays;
+}
+function formatDate(time){
+  var localtime = new Date(time);
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+  if (daysFrom(time) == 0){
+    return localtime.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+  if (daysFrom(time) < 7){
+    return dayNames[localtime.getDay()];
+  }else{
+    return localtime.toLocaleDateString();
+  }
+}
 
 export default function NoteItem(props){
     return (
@@ -51,7 +73,7 @@ export default function NoteItem(props){
         </Row>
         <Row>
           <div className="note-date">
-              <small>{props.note.time}</small>
+              <small>{formatDate(props.note.time)}</small>
           </div>
         </Row>
       </Container>
