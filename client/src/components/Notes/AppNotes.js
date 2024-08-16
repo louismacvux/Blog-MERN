@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom'
 import baseAPI from '../../utils/api';
 import SideBar from './SideBar';
 import NoteEditor from './NoteEditor';
@@ -20,10 +21,12 @@ import {
 } from "reactstrap";
 
 export default function AppNotes() {
+    const navigate = useNavigate();
     const [notes, setNotes] = useState(null);
     const [selectedId, setSelectedId] = useState(0);
     const [isSidebarCollapsed, setIsSidebarCollapsed] =  useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isSessModalOpen, setIsSessModalOpen] = useState(false);
     const [user, setUser] = useState(() => {
       const user = localStorage.getItem("user");
       return JSON.parse(user) || null;
@@ -48,12 +51,40 @@ export default function AppNotes() {
     }
 
     useEffect(() => {
-      if (user){
+      if (user && user.until > new Date()){
         document.title = `${user.name}'s notes`;
         getNotes();
+        setIsSessModalOpen(false);
+      }
+      else{
+        localStorage.clear();
+        navigate("/login")
       }
     },[])
     
+    useEffect(() => {
+      const expire = setTimeout(() => {
+        baseAPI
+          .post("/auth/logout")
+          .then((response) => {
+            setUser(null);
+            localStorage.clear();
+            setIsSessModalOpen(false);
+            navigate("/login");
+          })
+          .catch((error) => {
+            console.log(`An error has occured: ${error}`);
+          });
+      }, 86398000); //86398000
+      const reminder = setTimeout(() => {
+        setIsSessModalOpen(true);
+      }, 86338000); //86338000
+      return () => {
+        clearTimeout(expire);
+        clearTimeout(reminder);
+      };
+    },[isSessModalOpen])
+
     const selectNote = (id) =>{
         setSelectedId(id)
     }
@@ -88,7 +119,7 @@ export default function AppNotes() {
           });
       }
       setSelectedId(notes[0]._id);
-      setIsModalOpen(false);
+      setIsDeleteModalOpen(false);
     }
 
     async function newNote(){
@@ -147,97 +178,117 @@ export default function AppNotes() {
       else window.alert("Choose a note to edit first, or create new note.")
     }
 
-    function showLoggedIn(){
-      return (
-        <Container className="app">
-          {notes ? (
-            <div>
-              <Row>
-                <Col>
-                  <Container>
-                    <Row>
-                      <Button
-                        className="col-5"
-                        onClick={() =>
-                          setIsSidebarCollapsed(!isSidebarCollapsed)
-                        }>
-                        Sidebar
-                      </Button>
-                      <Button className="col-5" onClick={() => newNote()}>
-                        New Note
-                      </Button>
-                    </Row>
-                    <Row>
-                      {!isSidebarCollapsed && (
-                        <SideBar
-                          notes={notes}
-                          selectNote={selectNote}
-                          selectedId={selectedId}
-                        />
-                      )}
-                    </Row>
-                  </Container>
-                </Col>
-                <Col
-                  className={` ${
-                    isSidebarCollapsed ? "col-12" : "col-8 col-lg-9"
-                  }`}
-                >
-                  <div className="box col-1 offset-6">
-                    <UserDropdown setUser={setUser} />
-                  </div>
-                  <NoteEditor
-                    note={notes.find((note) => selectedId === note._id)}
-                    collapsed={isSidebarCollapsed}
-                    deleteNote={setIsModalOpen}
-                    saveNote={saveNote}
-                  />
-                </Col>
-              </Row>
-              <Modal
-                className="modal"
-                isOpen={isModalOpen}
-                fade={false}
-                centered={true}
-                toggle={() => setIsModalOpen(false)}
-              >
-                <ModalHeader
-                  className="close"
-                  toggle={() => setIsModalOpen(false)}
-                >
-                  Confirm Delete
-                </ModalHeader>
-                <ModalBody>
-                  Are you sure you want to delete this note?
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    className="confirm-button fa fa-lg fa-trash"
-                    onClick={() => deleteNote()}
-                  ></Button>{" "}
-                  <Button
-                    className="cancel-button fa fa-lg fa-times"
-                    onClick={() => setIsModalOpen(false)}
-                  ></Button>
-                </ModalFooter>
-              </Modal>
-            </div>
-          ) : (
-            <p className="no-note">fetching notes...</p>
-          )}
-        </Container>
-      );
+    async function refresh(){
+      baseAPI
+        .get("/auth/refresh")
+        .then(()=>{setIsSessModalOpen(false);})
+        .catch((error)=>{
+        window.alert(`An error has occured: ${error}`);
+      })
     }
 
-    function Login(){
+    function toggleButton() {
       return(
-        <GoogleLogin setUser={setUser}></GoogleLogin>
+      <Button className="sidebar-button" onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}>
+        Sidebar
+      </Button>
       )
     }
 
+    function showLoggedIn(){
+      return notes ? (
+        <div className="app">
+          <div className={`sidebar ${isSidebarCollapsed ? "collapsed" : ""}`}>
+            <div className="scrollable">
+              <div className="nav sidebar-nav box">
+                {toggleButton()}
+                <Button onClick={() => newNote()}>New Note</Button>
+              </div>
+              <div className="note-lists">
+                <SideBar
+                  notes={notes}
+                  selectNote={selectNote}
+                  selectedId={selectedId}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="note-editor">
+            <div className="nav editor-nav">
+              {isSidebarCollapsed ? toggleButton() : " "}
+              <div className='profile'> 
+                <UserDropdown setUser={setUser} />
+              </div>
+            </div>
+            <NoteEditor
+              note={notes.find((note) => selectedId === note._id)}
+              deleteNote={setIsDeleteModalOpen}
+              saveNote={saveNote}
+            />
+          </div>
+          <div className="popup">
+            <Modal
+              className="modal"
+              isOpen={isDeleteModalOpen}
+              fade={false}
+              centered={true}
+              toggle={() => setIsDeleteModalOpen(false)}
+            >
+              <ModalHeader
+                className="close"
+                toggle={() => setIsDeleteModalOpen(false)}
+              >
+                Confirm Delete
+              </ModalHeader>
+              <ModalBody>Are you sure you want to delete this note?</ModalBody>
+              <ModalFooter>
+                <Button
+                  className="confirm-button fa fa-lg fa-trash"
+                  onClick={() => deleteNote()}
+                ></Button>{" "}
+                <Button
+                  className="cancel-button fa fa-lg fa-times"
+                  onClick={() => setIsDeleteModalOpen(false)}
+                ></Button>
+              </ModalFooter>
+            </Modal>
+
+            <Modal
+              className="modal"
+              isOpen={isSessModalOpen}
+              fade={false}
+              centered={true}
+              toggle={() => setIsSessModalOpen(false)}
+            >
+              <ModalHeader
+                className="close"
+                toggle={() => setIsSessModalOpen(false)}
+              >
+                Are you still here?
+              </ModalHeader>
+              <ModalBody>
+                Due to inactivity, you will be logged out in 10 minutes.
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  onClick={() => {
+                    refresh();
+                  }}
+                >
+                  I'm here
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+        </div>
+      ) : (
+        <div className="app">
+          <p className="no-note">fetching notes...</p>
+        </div>
+      );
+    }
+    
     return (
-      <div className="app-container">
-        {user ? (showLoggedIn()): (Login())}
-      </div>
+        showLoggedIn()
     );
 }

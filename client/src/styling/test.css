@@ -1,0 +1,61 @@
+/* Darker background for the whole layout */
+body{
+    background-color: #8f8f8f57;
+    
+}
+.test .container{
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10px
+}
+
+/* Sidebar styling with rounded edges */
+.test .sidebar {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 0px;
+    height: 95vh;
+    flex-grow: 1;
+    overflow:scroll;
+}
+.test .close {
+    width: 0px;
+    flex-grow:0;
+}
+
+/* Sidebar items styling with rounded corners */
+.test .sidebar-item {
+    background-color: #ccc;
+    margin: 5px 10px;
+    padding: 15px;
+}
+
+/* Apply rounded corners to all items */
+.test .rounded-item {
+    border-radius: 10px;
+}
+
+/* Main content styling with rounded edges */
+.test .main-content {
+    display: flex;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-grow: 3;
+    height: 95vh;
+    /* Add some margin to separate from the sidebar */
+}
+
+.test .content {
+    align-self: center;
+    margin:auto;
+}
+.test .box {
+    border-style: solid;
+    border-width: 5px;
+    border-color: rgb(0, 255, 60);
+}

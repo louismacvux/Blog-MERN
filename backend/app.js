@@ -53,7 +53,7 @@ app.use(session({
   cookie: {
     sameSite: true, 
     secure: false, //NODE_ENV === 'production'
-    maxAge: parseInt(process.env.SESS_EXPIRES)*1000 //10 mins
+    maxAge: parseInt(process.env.SESS_EXPIRES)*1000 //86400
   }
 }));
 
@@ -86,13 +86,6 @@ app.use((req, res, next) => {
 });
 
 //Public Routes
-app.get("/api/v1/session/get", (req, res) => {
-  const user = { username: "Lon", user_id: 123456 };
-  req.session.user = user;
-  res.send(req.session);
-  console.log("session set");
-});
-
 app.get("/api/v1/header", sessionChecker, (req, res) => {
   console.log(req.session.user);
   console.log(req.sessionID);
@@ -101,16 +94,15 @@ app.get("/api/v1/header", sessionChecker, (req, res) => {
 
 app.use("/api/v1/auth/login", AuthRoute);
 
-app.use(sessionChecker);
-//Protected Routes
-app.get("/api/v1/session/destroy", (req,res) => {
-  req.session.destroy((err) => {
-    if (err) throw (err)
-    res.clearCookie(process.env.SESS_NAME);
-    res.status(200).send("Session destroyed")
-  });
-})
 
+//Protected Routes
+app.use(sessionChecker);
+app.get("/api/v1/auth/refresh", (req, res) => {
+  res.status(200).send("OK");
+});
+app.get("/api/v1/user", (req,res)=>{
+res.status(200).send(res.locals.user);  
+})
 app.use('/api/v1/auth/logout', Logout);
 
 app.use('/api/v1/note', noteRoute);

@@ -60,9 +60,20 @@ function formatDate(time){
   }
 }
 
+function NoteStatus(time){
+  if (time === 0){
+    return "Not Saved";
+  }
+  if (!time){
+    return "New";
+  }
+
+  return formatDate(time);
+}
+
 export default function NoteItem(props){
     return (
-      <Container
+      <Container key={props.note}
         className={`note-item  ${props.isSelected ? 'selected' : ''}`}
         onClick={() => props.selectNote(props.note._id)}
       >
@@ -73,7 +84,7 @@ export default function NoteItem(props){
         </Row>
         <Row>
           <div className="note-date">
-              <small>{formatDate(props.note.time)}</small>
+              <small>{NoteStatus(props.note.time)}</small>
           </div>
         </Row>
       </Container>

@@ -9,6 +9,7 @@ export default function NoteEditor({note, saveNote, deleteNote}) {
     const onChange = (value) => {
       setValue(value);
       note.content = value;
+      note.time = 0;
     };
 
     const newOptions = useMemo(() => {
@@ -56,12 +57,12 @@ export default function NoteEditor({note, saveNote, deleteNote}) {
     },[saveNote,deleteNote]);
 
     if (!note) {
-        return <div className="note-editor no-note">Select a note to edit</div>;
+        return <div className="no-note">Select a note to edit</div>;
     }
 
 
     return (
-      <div className="note-editor">
+      <div className="mde">
         <SimpleMDE
           id="editor"
           value={note.content}
