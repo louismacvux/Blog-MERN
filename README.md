@@ -1,2 +1,2 @@
 # Blog-MERN
-A blog with MERN stack
+A Markdown NOte-taking app
