@@ -4,8 +4,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.787);
     align-items: center;
+    background-color: #e7e5e5;
 }
 
 .header{
@@ -16,13 +17,22 @@
     padding-bottom: 5px;
 }
 
+.button {
+    padding: 5px 10px 5px 10px;
+}
+
+.button:hover{
+    background-color: #e7e5e5;
+    border-radius: 5px;
+}
 /* src/Sidebar.css */
 .sidebar {
-    background-color: #efeded;
+    background-color: #f8f8f8;
     box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 0px;
-    margin: 0px 5px 0px 10px;
+    padding: 0px; 
+    margin-right: 5px;
+    margin-left: 10px;
     height: 97vh;
     flex: 0 2 310px;
     overflow-y:hidden;
@@ -31,31 +41,30 @@
 .sidebar.collapsed {
     width: 0px;
     flex: 0 2 auto;
+    margin-left: 0px;
 }
 
 .scrollable {
     height: 100%;
     max-width: 100%;
     overflow-y:auto;
-    scrollbar-gutter: auto;
 }
 
 .note-lists {
     overflow-y: auto;
-    scrollbar-gutter: stable;
 }
 
 .sidebar-nav {
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #efeded;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #f8f8f8;
     position: sticky;
     top: 0;
+    z-index: 99;
 }
 
 .nav {
-    
     height: 50px;
     display: flex;
     justify-content: space-between;
@@ -74,22 +83,60 @@
 
 /* src/NoteItem.css */
 .note-item {
+    width: inherit;
     padding: 10px;
     cursor: pointer;
-    background-color: white;
-    border-radius: 5px;
     margin-bottom: 10px;
     margin-left: 10px;
+    margin-right: 10px;
+    background-color: rgb(255, 255, 255);
+    position: relative;
+}
+
+.style {
+    border-radius: 5px;
+}
+
+.wrap {
+    z-index: 90;
+    top: 50%;
+    right: 0;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.overlay {
+    background: linear-gradient(to right, rgba(255,255,255, 0),rgba(255,255,255, 0), rgb(255,255,255, 0) 90%, rgb(255,255,255), rgb(255, 255, 255));
+    position: absolute;  
+    width: 100%;
+    height: 100%;
+}
+
+.overlay:hover {
+    background: linear-gradient(to right, rgba(233, 233, 233, 0),rgb(233, 233, 233,0), rgb(233, 233, 233, 0) 90%, rgb(233, 233, 233), rgb(233, 233, 233));
 }
 
 .note-item.selected {
-    background-color: #e1e1e1;
+    background-color: #e9e9e9;
+}
+
+.note-item:hover{
+    background-color: rgb(233, 233, 233);
 }
 
 .note-title {
-    overflow:hidden;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
+.option-button {
+    padding: 20px 10px 20px 20px;
+    background: linear-gradient(to right, rgba(233,233,233, 0.1) 0.0000000001px, rgb(233,233,233),rgb(233,233,233),rgb(233,233,233));
+    position:absolute;
+}
+
+.option-menu {
+    z-index: 100;
+}
 /* src/NoteEditor.css */
 .note-editor {
     background-color: #fff;
@@ -102,9 +149,9 @@
 }
 
 .editor-nav {
-    width: 98%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .no-note {
@@ -117,9 +164,9 @@
 
 .mde {
     height: 90%;
-    width: 98%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 #editor {
@@ -134,21 +181,210 @@
     display: none;
 }
 
-.dropdownMenu {
+.DropdownMenu {
     right: 0;
     left: auto;
     border-radius: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.dropdownItem {
+.DropdownItem {
     padding: 10px 20px;
 }
 
-.dropdownItem:hover {
+.DropdownItem:hover {
     background-color: #f1f1f1;
+}
+
+.hidden {
+    display:none;
 }
 
 .box {
     border-style: solid;
+}
+
+/* src/Landing/
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0;
+    padding: 10px 0;
+}
+
+p {
+    margin: auto;
+    padding: 5px 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #333;
+    color: #fff;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-item {
+    color: #fff;
+    font-size: 16px;
+}
+
+.nav-item:hover {
+    text-decoration: underline;
+}
+
+/* Hero Section Styles */
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    background-color: #f4f4f4;
+}
+
+.hero h1 {
+    font-size: 48px;
+    color: #333;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #666;
+    width: 70%;
+}
+
+.cta-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+}
+
+.primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+/* Features Section Styles */
+.features {
+    padding: 50px 20px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.feature-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    width: 250px;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.feature-item h3 {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.feature-item p {
+    color: #666;
+}
+
+/* About Section Styles */
+.about {
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.about p {
+    color: #666;
+    width: 70%;
+}
+
+.about-image {
+    width: 300px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+/* CTA Section Styles */
+.cta-section {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #333;
+    color: #fff;
+}
+
+.cta-section h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+/* Footer Styles */
+.footer {
+    padding: 20px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+}
+
+.footer-links {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #fff;
+    margin: 0 10px;
+}
+
+.social-icons {
+    margin-bottom: 10px;
+}
+
+.social-icons img {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
 }

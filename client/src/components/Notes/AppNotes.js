@@ -3,16 +3,14 @@ import {useNavigate} from 'react-router-dom'
 import baseAPI from '../../utils/api';
 import SideBar from './SideBar';
 import NoteEditor from './NoteEditor';
-import GoogleLogin from '../GoogleLogin';
 import UserDropdown from './UserMenu.js';
 import intro from '../../utils/intro.js'
 import "../../styling/notes.css";
 import "../../styling/modal.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faBars, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import {
-  Container,
-  Row,
-  Col,
   Button,
   Modal,
   ModalHeader, 
@@ -46,6 +44,7 @@ export default function AppNotes() {
           if (data.length > 0 && selectedId === 0){
             setSelectedId(data[0]._id)
           }
+          updateUser();
         })
         .catch((error) => console.log(`An error has occured: ${error}`));
     }
@@ -58,7 +57,7 @@ export default function AppNotes() {
       }
       else{
         localStorage.clear();
-        navigate("/login")
+        navigate("/")
       }
     },[])
     
@@ -70,15 +69,15 @@ export default function AppNotes() {
             setUser(null);
             localStorage.clear();
             setIsSessModalOpen(false);
-            navigate("/login");
+            navigate("/");
           })
           .catch((error) => {
             console.log(`An error has occured: ${error}`);
           });
-      }, 86398000); //86398000
+      }, 86398000); //2s b4 1 day 86398000 2
       const reminder = setTimeout(() => {
         setIsSessModalOpen(true);
-      }, 86338000); //86338000
+      }, 85798000); //10m2s b4 1 day 85798000 
       return () => {
         clearTimeout(expire);
         clearTimeout(reminder);
@@ -187,12 +186,24 @@ export default function AppNotes() {
       })
     }
 
+    function updateUser(){
+      let date = new Date();
+      let expires = date.setDate(date.getDate() + 2); //2 days
+      let new_user = { ...user, until: expires };
+      localStorage.setItem("user", JSON.stringify(new_user));
+      setUser(new_user);
+    }
+
     function toggleButton() {
-      return(
-      <Button className="sidebar-button" onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}>
-        Sidebar
-      </Button>
-      )
+      return (
+        <div
+          className="button"
+          title={`${isSidebarCollapsed ? "Open" : "Close"} Sidebar`}
+          onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        >
+          <FontAwesomeIcon icon={faBars} size="lg" />
+        </div>
+      );
     }
 
     function showLoggedIn(){
@@ -200,15 +211,23 @@ export default function AppNotes() {
         <div className="app">
           <div className={`sidebar ${isSidebarCollapsed ? "collapsed" : ""}`}>
             <div className="scrollable">
-              <div className="nav sidebar-nav box">
+              <div className="nav sidebar-nav">
                 {toggleButton()}
-                <Button onClick={() => newNote()}>New Note</Button>
+                <div
+                  className="button"
+                  title="New Note"
+                  onClick={() => newNote()}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} size="lg" />
+                </div>
               </div>
               <div className="note-lists">
                 <SideBar
                   notes={notes}
                   selectNote={selectNote}
                   selectedId={selectedId}
+                  delete={setIsDeleteModalOpen}
+                  save={saveNote}
                 />
               </div>
             </div>
@@ -216,7 +235,7 @@ export default function AppNotes() {
           <div className="note-editor">
             <div className="nav editor-nav">
               {isSidebarCollapsed ? toggleButton() : " "}
-              <div className='profile'> 
+              <div className="profile">
                 <UserDropdown setUser={setUser} />
               </div>
             </div>
@@ -242,14 +261,15 @@ export default function AppNotes() {
               </ModalHeader>
               <ModalBody>Are you sure you want to delete this note?</ModalBody>
               <ModalFooter>
-                <Button
-                  className="confirm-button fa fa-lg fa-trash"
-                  onClick={() => deleteNote()}
-                ></Button>{" "}
-                <Button
-                  className="cancel-button fa fa-lg fa-times"
+                <div className="button" onClick={() => deleteNote()}>
+                  <FontAwesomeIcon icon={faTrash} size="lg" />
+                </div>{" "}
+                <div
+                  className="button"
                   onClick={() => setIsDeleteModalOpen(false)}
-                ></Button>
+                >
+                  <FontAwesomeIcon icon={faXmark} size="lg" />
+                </div>
               </ModalFooter>
             </Modal>
 

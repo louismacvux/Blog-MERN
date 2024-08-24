@@ -3,6 +3,8 @@ import {useNavigate} from 'react-router-dom';
 import baseAPI from '../utils/api';
 import { useGoogleLogin } from '@react-oauth/google';
 import "../styling/notes.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 export default function LoginGoogle(props) {
     const navigate = useNavigate();
@@ -15,6 +17,7 @@ export default function LoginGoogle(props) {
         if (user && user.until > new Date()){
             navigate("/notes");
         }
+        document.title = `Login`;
     },[])
 
     const googleAuth = (code) => baseAPI.get(`/auth/login/google?code=${code}`);
@@ -25,7 +28,7 @@ export default function LoginGoogle(props) {
                 const result = await googleAuth(authResult.code)
                 setUser(result.data);
                 let date = new Date()
-                let expires = date.setDate(date.getDate()+2) //2 days
+                let expires = date.setDate(date.getDate()+1) //2 days
                 let new_user = {...result.data, until:expires}
                 localStorage.setItem('user',JSON.stringify(new_user));
                 navigate("/notes");
@@ -43,8 +46,8 @@ export default function LoginGoogle(props) {
     const login = useGoogleLogin({onSuccess: responseGoogle, onError: responseGoogle, flow: "auth-code",});
 
     return (
-      <div className="app-container">
-        <button style={{ padding: "10px 20px" }} onClick={login}>Sign in with Google 🚀</button>
+      <div onClick={login}>
+        <FontAwesomeIcon icon={faGoogle} /> {props.buttonName}
       </div>
     ); 
 }

@@ -5,18 +5,17 @@ export default function SideBar(props) {
 
 
     return (
-      <div>
         <div className="notes-list">
           {props.notes.map((note) => (
             <NoteItem
-              className="note-item"
               key={note._id}
               note={note}
               selectNote={props.selectNote}
               isSelected={props.selectedId === note._id}
+              deleteItem={props.delete}
+              saveItem={props.save}
             ></NoteItem>
           ))}
         </div>
-      </div>
     );
 }

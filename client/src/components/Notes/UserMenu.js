@@ -8,6 +8,8 @@ import {
 } from "reactstrap";
 import Logout from "../Logout";
 import "../../styling/notes.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleQuestion, faUser, faBug } from "@fortawesome/free-solid-svg-icons";
 
 const UserDropdown = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -20,24 +22,36 @@ const UserDropdown = (props) => {
     <Dropdown isOpen={dropdownOpen} toggle={toggle} direction="down">
       <DropdownToggle data-toggle="dropdown" tag="span">
         <img
-          src={user.image}
-          alt={user.name}
+          src={user && user.image}
+          alt={user && user.name}
           style={{ borderRadius: "50%", width: "30px", height: "30px" }}
           referrerPolicy="no-referrer"
         />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem header>{user.name}</DropdownItem>
-        <DropdownItem divider />
         <DropdownItem>
+          <FontAwesomeIcon icon={faUser} /> {` ${user&&user.name}`}
+        </DropdownItem>
+        <DropdownItem divider />
+        <DropdownItem className="button">
+          <Logout setUser={props.setUser} />
+        </DropdownItem>
+        <DropdownItem className="button">
           <a
-            href="mailto:minhlong9696@gmail.com?subject=Bug%20Report"
-            style={{color: "black", textDecoration: "none"}}>
-            Report a bug
+            href="https://www.markdownguide.org/basic-syntax/"
+            style={{ color: "black", textDecoration: "none" }}
+          >
+            <FontAwesomeIcon icon={faCircleQuestion} /> Tutorial
           </a>
         </DropdownItem>
-        <DropdownItem>
-          <Logout setUser={props.setUser}>Logout</Logout>
+        <DropdownItem divider />
+        <DropdownItem className="button">
+          <a
+            href="mailto:minhlong9696@gmail.com?subject=Bug%20Report"
+            style={{ color: "black", textDecoration: "none" }}
+          >
+            <FontAwesomeIcon icon={faBug} /> Report a bug
+          </a>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
