@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Modal, ModalHeader, ModalBody, 
     Col, Button, Form, FormGroup, Label, Input} from "reactstrap";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function EditModal(props) {
   const [postContent, setPostContent] = useState(props.post);
-  const navigate = useNavigate();
   useEffect(() => {
     setPostContent(props.post)
   }, [props.post]);

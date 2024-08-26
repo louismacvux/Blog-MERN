@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {Modal, ModalHeader, ModalBody,
 Col, Button, Form, FormGroup, Label, Input} from "reactstrap";
 import axios from "axios";
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 
 export default function UploadModal(props){
