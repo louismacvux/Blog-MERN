@@ -78,6 +78,10 @@ const connectDB = async () =>{
 connectDB();
 
 //Middlewares
+app.get("/hello", (req,res) => {
+  res.status(200).send("hello world")
+});
+
 app.use(parseCookies);
 
 app.use((req, res, next) => {
