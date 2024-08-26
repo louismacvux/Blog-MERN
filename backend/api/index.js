@@ -5,13 +5,13 @@ import dotenv from "dotenv"
 import bodyParser from "body-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import feedRoute from './api/blog/feed.blog.js';
-import postRoute from './api/blog/post.blog.js';
-import noteRoute from './api/note/post.note.js';
-import allNotesRoute from './api/note/feed.note.js';
-import AuthRoute from './api/auth.route.js';
-import Logout from './api/logout.route.js';
-import {sessionChecker, logger, parseCookies} from './utils/middleware.js';
+import feedRoute from './blog/feed.blog.js';
+import postRoute from './blog/post.blog.js';
+import noteRoute from './note/post.note.js';
+import allNotesRoute from './note/feed.note.js';
+import AuthRoute from './auth.route.js';
+import Logout from './logout.route.js';
+import {sessionChecker, logger, parseCookies} from '../utils/middleware.js';
 import xss from 'xss';
 import mongoSanitze from 'express-mongo-sanitize';
 
