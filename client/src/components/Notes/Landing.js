@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import "../../styling/notes.css";
-import "../../styling/modal.css";
 import GoogleLogin from "../GoogleLogin";
-// import "./LandingPage.css"; // Import the CSS file
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 // Header Component
 const Header = () => (
   <header className="header">
-    <div className="logo">CodeBinder</div>
+    <div className="logo">NoteBinder</div>
     <nav className="nav">
       <a href="#" className="nav-item">
         Home
@@ -28,10 +27,10 @@ const Header = () => (
 // Hero Component
 const Hero = () => (
   <section className="hero">
-    <h1>Organize Your Notes with CodeBinder</h1>
+    <h1>Organize Your Notes with NoteBinder</h1>
     <p>Simple, efficient, and perfect for anyone who loves using Markdown.</p>
     <p>
-      CodeBinder was created to make note-taking easier, whether for personal
+      NoteBinder was created to make note-taking easier, whether for personal
       projects, work, or study. Dive into a seamless experience designed by a
       Markdown user.
     </p>
@@ -57,6 +56,7 @@ const Features = () => (
       </div>
       <div className="feature-item">
         <h3>Search and Organize</h3>
+        <small>Coming Soon</small>
         <p>Use powerful search and tagging features to stay organized.</p>
       </div>
       <div className="feature-item" style={{ display: "none" }}>
@@ -70,17 +70,17 @@ const Features = () => (
 // About Component
 const About = () => (
   <section id="about" className="about">
-    <h2>About CodeBinder</h2>
+    <h2>About NoteBinder</h2>
     <p >
-      CodeBinder is a hobby project I created with students in mind. Having used
+      NoteBinder is a hobby project I created with students in mind. Having used
       Markdown to take lecture notes during my own studies, I wanted to build my
       own tool to make note-taking more efficient and enjoyable.
     </p>
     <p >
-      While CodeBinder is inspired by the needs of computer science students,
+      While NoteBinder is inspired by the needs of computer science students,
       it’s versatile enough for anyone who appreciates a powerful Markdown-based
       note-taking experience. Whether you're a student, a developer, or just
-      someone who loves using Markdown, CodeBinder is designed to meet your
+      someone who loves using Markdown, NoteBinder is designed to meet your
       needs.
     </p>
     <img
@@ -109,23 +109,23 @@ const Footer = () => (
     </div>
     <div className="social-icons">
       <a href="#">
-        <img src="facebook-icon.png" alt="Facebook" />
-      </a>
-      <a href="#">
         <img src="twitter-icon.png" alt="Twitter" />
       </a>
       <a href="#">
         <img src="linkedin-icon.png" alt="LinkedIn" />
       </a>
+      <a href="https://github.com/louismacvux/Blog-MERN">
+        <FontAwesomeIcon icon={faGithub} title="GitHub" />
+      </a>
     </div>
-    <p>© 2024 CodeBinder. All rights reserved.</p>
+    <p>© 2024 NoteBinder. All rights reserved.</p>
   </footer>
 );
 
 // Main Landing Page Component
 export default function LandingPage(){
   useEffect(() => {
-    document.title = `CodeBinder`;
+    document.title = `NoteBinder`;
   },[])
 
   return(
@@ -139,5 +139,4 @@ export default function LandingPage(){
     </div>
   );
 };
-
 
