@@ -26,8 +26,8 @@ const googleAuth = async (req, res, next) => {
   }catch(err){
     next(err)
   }
+  console.log(`userRes: ${userRes}`);
   let user = await User.findOne({ email: userRes.data.email });
-  console.log(`userRes: ${userRes}`)
   
   if (!user) {
     console.log("New User found");
