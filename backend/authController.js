@@ -17,7 +17,7 @@ const googleAuth = async (req, res, next) => {
     const googleRes = await oauth2Client.getToken(code);
     
     oauth2Client.setCredentials(googleRes.tokens);
-    console.log(googleRes);
+    console.log(`googleRes ${JSON.stringify(googleRes)}`);
     userRes = await axios.get(
       `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
     );
@@ -26,7 +26,7 @@ const googleAuth = async (req, res, next) => {
   }catch(err){
     next(err)
   }
-  console.log(`userRes: ${userRes}`);
+  console.log(`userRes: ${JSON.stringify(userRes)}`);
   let user = await User.findOne({ email: userRes.data.email });
   
   if (!user) {
