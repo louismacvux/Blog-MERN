@@ -23,7 +23,7 @@ app.use(
   cors({
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    origin: true,
+    origin: "https://notebinder.vercel.app/",
   })
 );
 
