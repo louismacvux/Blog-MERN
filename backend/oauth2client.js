@@ -10,7 +10,7 @@ const REDIRECT_URI = process.env.REDIRECT_URI;
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  "https://notebinder.vercel.app/"
+  "https://notebinder.vercel.app"
 );
 
 export default oauth2Client
