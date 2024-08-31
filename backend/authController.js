@@ -9,7 +9,12 @@ dotenv.config();
 /* GET Google Authentication API. */
 const googleAuth = async (req, res, next) => {
   console.log("googleAuth")
-  const userRes = {"something":"something"};
+  const userRes = {
+    email: "testingemail@vercel.com",
+    name: "vercel tester",
+    image:
+      "https://lh3.googleusercontent.com/a/ACg8ocItyATqfh5I7HHEbjRQWyHYTqGWheI09QDy-evq0S1_EJGJo8Xx=s96-c"
+  };
   try {
     const code = req.query.code;
     console.log("USER CREDENTIAL -> ", code);
@@ -18,23 +23,23 @@ const googleAuth = async (req, res, next) => {
     
     oauth2Client.setCredentials(googleRes.tokens);
     console.log(`googleRes ${googleRes}`);
-    userRes = await axios.get(
-      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
-    );
+    // userRes = await axios.get(
+    //   `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
+    // );
 
     
   }catch(err){
     next(err)
   }
   console.log(`userRes: ${JSON.stringify(userRes)}`);
-  let user = await User.findOne({ email: userRes.data.email });
+  let user = await User.findOne({ email: userRes.email });
   
   if (!user) {
     console.log("New User found");
     user = await User.create({
-      name: userRes.data.name,
-      email: userRes.data.email,
-      image: userRes.data.picture,
+      name: userRes.name,
+      email: userRes.email,
+      image: userRes.picture,
     });
   }
 
