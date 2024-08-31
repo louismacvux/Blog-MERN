@@ -51,7 +51,7 @@ app.use(session({
     collectionName: 'session'
   }),
   cookie: {
-    sameSite: true, 
+    sameSite: false, 
     secure: true, //NODE_ENV === 'production'
     maxAge: parseInt(process.env.SESS_EXPIRES)*1000 //86400
   }
