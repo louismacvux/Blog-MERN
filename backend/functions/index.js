@@ -54,7 +54,7 @@ app.use(
     cookie: {
       sameSite: "none",
       secure: true, //NODE_ENV === 'production'
-      domain: "https://notebinder.vercel.app",
+      domain: "notebinder.vercel.app",
       maxAge: parseInt(process.env.SESS_EXPIRES) * 1000, //86400
     },
   })
