@@ -39,14 +39,14 @@ const googleAuth = async (req, res, next) => {
     }
   }
   console.log(`userRes: ${userRes}`);
-  let user = await User.findOne({ email: userRes.email });
+  let user = await User.findOne({ email: userRes.data.email });
   
   if (!user) {
     console.log("New User found");
     user = await User.create({
-      name: userRes.name,
-      email: userRes.email,
-      image: userRes.picture,
+      name: userRes.data.name,
+      email: userRes.data.email,
+      image: userRes.data.picture,
     });
   }
 
