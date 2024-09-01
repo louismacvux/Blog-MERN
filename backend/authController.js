@@ -38,7 +38,7 @@ const googleAuth = async (req, res, next) => {
       console.error("An error occurred:", error.message);
     }
   }
-  console.log(`userRes: ${JSON.stringify(userRes)}`);
+  console.log(`userRes: ${userRes}`);
   let user = await User.findOne({ email: userRes.email });
   
   if (!user) {
