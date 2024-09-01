@@ -40,6 +40,7 @@ app.use(
   }),
 );
 
+app.set('trust proxy', 1)
 app.use(session({
   name: process.env.SESS_NAME,
   secret: process.env.SESS_SECRET,
@@ -52,8 +53,7 @@ app.use(session({
   }),
   cookie: {
     sameSite: "none", 
-    secure: false, //NODE_ENV === 'production'
-    // domain: "notebinder.vercel.app",
+    secure: true, //NODE_ENV === 'production'
     maxAge: parseInt(process.env.SESS_EXPIRES)*1000 //86400
   }
 }));
