@@ -20,16 +20,23 @@ const googleAuth = async (req, res, next) => {
     console.log("USER CREDENTIAL -> ", code);
 
     const googleRes = await oauth2Client.getToken(code);
-    
+
     oauth2Client.setCredentials(googleRes.tokens);
     console.log(`googleRes ${googleRes}`);
     userRes = await axios.get(
-      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`,
+      {
+        timeout: 5000, // Set the timeout to 5000 milliseconds (5 seconds)
+      }
     );
-
-    
-  }catch(err){
-    next(err)
+  } catch (error) {
+    if (error.code === "ECONNABORTED") {
+      // This code indicates a timeout
+      console.error("Request timed out:", error.message);
+    } else {
+      // Other errors
+      console.error("An error occurred:", error.message);
+    }
   }
   console.log(`userRes: ${JSON.stringify(userRes)}`);
   let user = await User.findOne({ email: userRes.email });
