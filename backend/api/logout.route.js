@@ -10,7 +10,7 @@ const Logout = (req,res,next) => {
       if (user){
         req.session.destroy((err) => {
           if (err) throw (err);
-          res.clearCookie(process.env.SESS_NAME, { sameSite: "none" });
+          res.clearCookie(process.env.SESS_NAME, { sameSite: "none", secure: true });
           res.status(200).send(user);
         });
       }else{

@@ -9,7 +9,7 @@ dotenv.config();
 /* GET Google Authentication API. */
 const googleAuth = async (req, res, next) => {
   console.log("googleAuth")
-  const userRes = {
+  let userRes = {
     email: "testingemail@vercel.com",
     name: "vercel tester",
     image:
