@@ -5,18 +5,29 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 import Logout from "../Logout";
 import "../../styling/notes.css";
+import "../../styling/modal.css";
+import releaseNote from "../../utils/releasenote.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleQuestion, faUser, faBug } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleQuestion,
+  faUser,
+  faBug,
+  faNoteSticky,
+} from "@fortawesome/free-solid-svg-icons";
 
 const UserDropdown = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [ReleaseNoteModal, setReleaseNoteModal] = useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle} direction="down">
@@ -30,7 +41,7 @@ const UserDropdown = (props) => {
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem>
-          <FontAwesomeIcon icon={faUser} /> {` ${user&&user.name}`}
+          <FontAwesomeIcon icon={faUser} /> {` ${user && user.name}`}
         </DropdownItem>
         <DropdownItem divider />
         <DropdownItem className="button">
@@ -53,7 +64,28 @@ const UserDropdown = (props) => {
             <FontAwesomeIcon icon={faBug} /> Report a bug
           </a>
         </DropdownItem>
+        <DropdownItem
+          className="button"
+          onClick={() => setReleaseNoteModal(true)}
+        >
+          <FontAwesomeIcon icon={faNoteSticky} /> Release Note
+        </DropdownItem>
       </DropdownMenu>
+      <Modal
+        className="modal"
+        isOpen={ReleaseNoteModal}
+        fade={false}
+        centered={true}
+        toggle={() => setReleaseNoteModal(false)}
+      >
+        <ModalHeader
+          className="close"
+          toggle={() => setReleaseNoteModal(false)}
+        >
+          Release Note
+        </ModalHeader>
+        <ModalBody>{releaseNote}</ModalBody>
+      </Modal>
     </Dropdown>
   );
 };
