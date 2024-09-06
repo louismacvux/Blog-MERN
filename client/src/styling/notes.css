@@ -9,8 +9,8 @@
     background-color: #e7e5e5;
 }
 
-.header{
-    display:flex;
+.header {
+    display: flex;
     align-items: center;
     justify-content: center;
     padding-top: 5px;
@@ -21,37 +21,44 @@
     padding: 5px 10px 5px 10px;
 }
 
-.button:hover{
+.button:hover {
     background-color: #e7e5e5;
     border-radius: 5px;
 }
+
 /* src/Sidebar.css */
 .sidebar {
     background-color: #f8f8f8;
     box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 0px; 
+    padding: 0px;
     margin-right: 5px;
     margin-left: 10px;
     height: 97vh;
     flex: 0 2 310px;
-    overflow-y:hidden;
+    overflow-y: hidden;
 }
 
 .sidebar.collapsed {
     width: 0px;
     flex: 0 2 auto;
     margin-left: 0px;
+    z-index: -99;
 }
 
 .scrollable {
     height: 100%;
     max-width: 100%;
-    overflow-y:auto;
+    overflow-y: auto;
 }
 
 .note-lists {
     overflow-y: auto;
+    top: 60px;
+    bottom: 15px;
+    left: 10px;
+    right: calc(100% - 320px);
+    position: absolute;
 }
 
 .sidebar-nav {
@@ -61,7 +68,7 @@
     background-color: #f8f8f8;
     position: sticky;
     top: 0;
-    z-index: 99;
+    z-index: 3;
 }
 
 .nav {
@@ -98,28 +105,29 @@
 }
 
 .wrap {
-    z-index: 90;
+    z-index: 1;
     top: 50%;
     right: 0;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
 }
+
 .overlay {
-    background: linear-gradient(to right, rgba(255,255,255, 0),rgba(255,255,255, 0), rgb(255,255,255, 0) 90%, rgb(255,255,255), rgb(255, 255, 255));
-    position: absolute;  
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgb(255, 255, 255, 0) 90%, rgb(255, 255, 255), rgb(255, 255, 255));
+    position: absolute;
     width: 100%;
     height: 100%;
 }
 
 .overlay:hover {
-    background: linear-gradient(to right, rgba(233, 233, 233, 0),rgb(233, 233, 233,0), rgb(233, 233, 233, 0) 90%, rgb(233, 233, 233), rgb(233, 233, 233));
+    background: linear-gradient(to right, rgba(233, 233, 233, 0), rgb(233, 233, 233, 0), rgb(233, 233, 233, 0) 90%, rgb(233, 233, 233), rgb(233, 233, 233));
 }
 
 .note-item.selected {
-    background-color: #e9e9e9;
+    background-color: rgb(233, 233, 233);
 }
 
-.note-item:hover{
+.note-item:hover {
     background-color: rgb(233, 233, 233);
 }
 
@@ -128,15 +136,12 @@
     overflow: hidden;
 }
 
-.option-button {
+.option-button-overlay {
     padding: 20px 10px 20px 20px;
-    background: linear-gradient(to right, rgba(233,233,233, 0.1) 0.0000000001px, rgb(233,233,233),rgb(233,233,233),rgb(233,233,233));
-    position:absolute;
+    background: linear-gradient(to right, rgba(233, 233, 233, 0.1) 0.0000000001px, rgb(233, 233, 233), rgb(233, 233, 233), rgb(233, 233, 233));
+    position: absolute;
 }
 
-.option-menu {
-    z-index: 100;
-}
 /* src/NoteEditor.css */
 .note-editor {
     background-color: #fff;
@@ -172,6 +177,7 @@
 #editor {
     margin-left: 5%;
 }
+
 /* src/UserDropdown*/
 .profile {
     margin-left: auto;
@@ -197,7 +203,7 @@
 }
 
 .hidden {
-    display:none;
+    display: none;
 }
 
 .box {

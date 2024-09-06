@@ -98,12 +98,12 @@ export default function NoteItem({note,selectNote,isSelected,deleteItem,saveItem
         className="option-menu"
         isOpen={dropdownOpen}
         toggle={toggle}
-        direction="down"
+        direction="end"
       >
         <DropdownToggle data-toggle="dropdown" tag="span">
           <FontAwesomeIcon title="Options" icon={faEllipsisVertical} />
         </DropdownToggle>
-        <DropdownMenu>
+        <DropdownMenu container={"note-lists"}>
           <DropdownItem className="button">
             <div onClick={saveItem}>
               <FontAwesomeIcon icon={faFloppyDisk} /> Save
@@ -132,7 +132,7 @@ export default function NoteItem({note,selectNote,isSelected,deleteItem,saveItem
         <small>{NoteStatus(note.time)}</small>
       </div>
 
-      <div className={`option-button wrap style ${isSelected ? "" : "hidden"}`}>
+      <div className={`option-button-overlay wrap style ${isSelected ? "" : "hidden"}`}>
         <div onClick={() => toggle}>
           {OptionMenu()}
         </div>

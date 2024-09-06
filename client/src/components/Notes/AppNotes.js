@@ -221,7 +221,7 @@ export default function AppNotes() {
                   <FontAwesomeIcon icon={faPenToSquare} size="lg" />
                 </div>
               </div>
-              <div className="note-lists">
+              <div className="note-lists" id="note-lists">
                 <SideBar
                   notes={notes}
                   selectNote={selectNote}

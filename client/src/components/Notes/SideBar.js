@@ -5,7 +5,7 @@ export default function SideBar(props) {
 
 
     return (
-        <div className="notes-list">
+        <div>
           {props.notes.map((note) => (
             <NoteItem
               key={note._id}

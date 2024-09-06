@@ -23,36 +23,39 @@ export default function NoteEditor({note, saveNote, deleteNote}) {
           "heading",
           "|",
           "quote",
+          "code",
           "unordered-list",
           "ordered-list",
           "|",
           "link",
           "image",
           "table",
+          "horizontal-rule",
           "|",
           "preview",
           "side-by-side",
           "fullscreen",
           "|",
           {
-            name: "custom",
-            action: function customFunction(editor){
+            name: "customSave",
+            action: function customFunction(editor) {
               saveNote();
             },
             className: "fa fa-save",
             title: "Save",
           },
           {
-            name: "custom",
-            action: function customFunction(editor){
-                deleteNote(true);
-			      },
+            name: "customDelete",
+            action: function customFunction(editor) {
+              deleteNote(true);
+            },
             className: "fa fa-trash",
             title: "Delete",
           },
           "|",
           "guide",
         ],
+        shortcuts: { customSave: "Cmd-S" },
       };
     },[saveNote,deleteNote]);
 
