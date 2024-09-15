@@ -84,7 +84,7 @@ const UserDropdown = (props) => {
         >
           Release Note
         </ModalHeader>
-        <ModalBody>{releaseNote}</ModalBody>
+        <ModalBody>{releaseNote()}</ModalBody>
       </Modal>
     </Dropdown>
   );

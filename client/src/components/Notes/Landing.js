@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../../styling/notes.css";
+import "../../styling/landing.css";
 import GoogleLogin from "../GoogleLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
