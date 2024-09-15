@@ -1,23 +1,32 @@
-/* src/Modal.css */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.modal-header .close {
-    display: none;
+body {
+    --color-text: black;
+    --color-dropdown: #dbdbe0;
+    --color-modal: #e6e6e9;
 }
 
-.modal-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
+@media (prefers-color-scheme: dark) {
+    body {
+        --color-text: #c9c3bc;
+        --color-dropdown: #1a1e2d;
+        --color-modal: #141b31;
+    }
+}
+
+/* src/Modal.css */
+.modal-header,
+.modal-body,
+.modal-footer {
+    color: var(--color-text) !important;
+    background-color: var(--color-modal);
+}
+
+.modal-header {
+    color: var(--color-text) !important;
+    border-bottom: 1px solid var(--color-text);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--color-text);
 }
 
 .confirm-button {
@@ -36,4 +45,11 @@
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.dropdown-menu,
+.dropdown-item,
+a {
+    background-color: var(--color-dropdown);
+    color: var(--color-text) !important;
 }
